@@ -15,6 +15,9 @@ https://sakura-editor.github.io/
 この中の上から３つ目
 sakura-tag-v2.4.1-build2849-ee8234f-Win32-Release-Installer.zip
 を選んで、解凍してインストールしてください。
+#まとめ
+クローンして、プルでサーバDBの状態をとってきて、変更して
+(差分を確認して)、コミットして、プッシュ
 
 
 
