@@ -1,0 +1,16 @@
+カメラ(CaptureComponent2D)のTextureTargetとそれを持つBPは同じ側にしといてください。
+BP_PortalAの内部のカメラなら、RT_PortalAをTextureTargetにしてください。
+何故かというと、BP_PortalAが撮影した内容がRT_PortalAに書き込まれます。
+
+BP_PortalBの内部のカメラなら、RT_PortalBをTextureTargetにしてください。
+何故かというと、BP_PortalBが撮影した内容がRT_PortalBに書き込まれます。
+
+
+で、ConstructionScript内で、Planeにたいして、マテリアルを割り当てるわけですが、
+実行時にテクスチャを切り替えるため、TextureParameterを使用したマテリアルの
+ダイナミックインスタンスを作ります(CreateDynamicMaterialInstance)で、
+SetTextureParameterで、指定するテクスチャが、今もしBP_PortalAならば、RT_PortalBにする
+逆に、今がBP_PortalBならばRT_PortalAにする。
+
+これにより、２つのポータルがお互いのカメラから見えてる映像をマテリアルとする。
+(平面に、もう一方のポータルから見た映像が映し出されてる)

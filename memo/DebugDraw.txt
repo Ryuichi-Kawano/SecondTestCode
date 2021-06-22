@@ -1,0 +1,7 @@
+DrawLineAA
+DrawBox
+DrawCircleAA
+は、デバッグ時(主に当たり判定)に役立つので
+使えるようになっときましょう。
+もちろん、これでゲームを作ることもできます。
+それやってるのが、Solid Aetherです。
