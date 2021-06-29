@@ -60,6 +60,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int assetsH = LoadGraph(L"img/Assets.png");
 	assert(assetsH >= 0);
 
+	int arrowH = LoadGraph(L"img/arrow.png");
+	assert(arrowH >= 0);
+
+
 	Rect rcA = { {200,200},50,50 };
 	char keystate[256];
 	//	auto graphH = DxLib::LoadGraph(L"../../../Asset/Adventurer-1.5/idle.png");//Individual Sprites/adventurer-idle-00.png");
@@ -107,7 +111,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		float theta = (float)(frameForAngle)*DX_PI_F / 180.0f;
 		int x = 0;
 		int y = 240;// +100 * sinf(theta);
-		Position2 lastPos(x, y);
+		Position2 lastPos(x, y);//前の座標
 		Position2 p0(x, y);
 		//過去１過去２。過去２のほうがより過去。描画対象は過去１
 		Vector2 lastDelta90Vectors[2] = { { 0.0f,0.0f },{0.0f,0.0f} };
@@ -171,23 +175,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			// 
 			auto p1 = p0;
 			auto deltaVec = Vector2(block_size, 
-				40.0f *	sinf(0.5f * (float)(frameForAngle + block_size * i) * DX_PI_F / 180.0f)
+				50.0f *	sinf(0.5f * (float)(frameForAngle + block_size * i) * DX_PI_F / 180.0f)
 			);
 			deltaVec = deltaVec.Normalized() * block_size;
 			p1 = p0+deltaVec;
 			auto delta90Vec = deltaVec.Rotated90();
 
 			auto middleVecR = delta90Vec;
+			auto middleVecL = delta90Vec;
 			if (!(lastDelta90Vectors[0] == Vector2(0.0f, 0.0f)) ){//過去１
 				middleVecR = (delta90Vec + lastDelta90Vectors[0]).Normalized() * block_size;
+				middleVecL = lastDelta90Vectors[0];
 			}
 			
-			auto middleVecL = delta90Vec;
 			if (!(lastDelta90Vectors[1] == Vector2(0.0f, 0.0f))) {//過去２
 				middleVecL = (lastDelta90Vectors[0] + lastDelta90Vectors[1]).Normalized() * block_size;
 			}
+
 			lastDelta90Vectors[1] = lastDelta90Vectors[0];
 			lastDelta90Vectors[0] = deltaVec.Rotated90();
+			
 
 			//地面の表示
 			DrawLineAA(//上辺
@@ -196,7 +203,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				0xffffff, 3.0f);
 			DrawCircle(p0.x, p0.y,5, 0xffaaaa);
 
-			auto leftPos = p0 + middleVecL;
+			auto leftPos = lastPos + middleVecL;
+			auto rightPos = p0 + middleVecR;
 			//auto middlePos = leftPos;
 			//if (!(lastDeltaVec90 == Vector2(0.0f, 0.0f))) {
 			//	auto halfVec = deltaVec.Rotated90() + lastDeltaVec90;
@@ -204,7 +212,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//	middlePos = p0 + halfVec.Normalized() * block_size;
 			//}
 			//lastDeltaVec90 = deltaVec.Rotated90();
-			auto rightPos = p1 + middleVecR;
+			
 			//DrawLineAA(//左辺
 			//	p0.x, p0.y, //始点
 			//	leftPos.x,leftPos.y, //終点
@@ -217,12 +225,53 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//	p0.x, p0.y, //始点
 			//	middlePos.x, middlePos.y, //終点
 			//	0xffaaaa, 3.0f);
-			DrawModiGraph(
-				p0.x, p0.y,//左上
-				p1.x, p1.y, //右上
-				rightPos.x, rightPos.y,
-				leftPos.x, leftPos.y,
-				groundH, true);
+			if (i == count) {//最後の要素
+				//最後のひとつ手前
+				DrawModiGraph(
+					lastPos.x, lastPos.y,//左上
+					p0.x, p0.y, //右上
+					rightPos.x, rightPos.y,//右下
+					leftPos.x, leftPos.y,//左下
+					groundH, true);
+				//DrawLineAA(//左辺
+				//	lastPos.x, lastPos.y,
+				//	leftPos.x, leftPos.y,
+				//	0xffffff, 3.0f
+				//);
+
+				leftPos = p0 + middleVecR;
+				auto rightPos2 = p1 + delta90Vec;
+				DrawModiGraph(
+					p0.x, p0.y,//左上
+					p1.x, p1.y, //右上
+					rightPos2.x, rightPos2.y,//右下
+					leftPos.x, leftPos.y,//左下
+					groundH, true);
+				//DrawLineAA(//右辺
+				//	p0.x, p0.y,
+				//	rightPos.x, rightPos.y,
+				//	0xffffff, 3.0f
+				//);
+			}
+			else {
+				DrawModiGraph(
+					lastPos.x, lastPos.y,//左上
+					p0.x, p0.y, //右上
+					rightPos.x, rightPos.y,//右下
+					leftPos.x, leftPos.y,//左下
+					groundH, true);
+				//DrawLineAA(//左辺
+				//	lastPos.x, lastPos.y,
+				//	leftPos.x, leftPos.y,
+				//	0xffffff, 3.0f
+				//);
+				//DrawLineAA(//右辺
+				//	p0.x, p0.y,
+				//	rightPos.x, rightPos.y,
+				//	0xffffff, 3.0f
+				//);
+			}
+
 
 			//auto rightPos = p1 + middleVecR;
 
@@ -252,6 +301,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//	p0.x, p0.y, //始点
 			//	leftPos.x, leftPos.y, //終点
 			//	0xff8888, 3.0f);
+			lastPos = p0;
 			p0 = p1;
 
 		}
