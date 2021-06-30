@@ -30,11 +30,11 @@ DrawRotaGraphもDrawExpandGraphも必要ない。
 この座標P(p,q)の原点からの距離がrであり、
 Ｘ軸(基準軸)とのなす角度がθであるとする。
 
-r=√(p*p+q*q)
-θ=atan2(q,p)
+d=√(p*p+q*q)
+φ=atan2(q,p)
 
 という感じで、距離と角度によってもその場所は表現できる
-つまり同じ座標PをP(r,θ)とも書ける。これを「極座標」と
+つまり同じ座標PをP(d,φ)とも書ける。これを「極座標」と
 いう。
 
 Gimpだと
@@ -45,29 +45,35 @@ y→r
 |sin cos|(p,q)
 
 
-P(r,θ)⇒P(p,q)
+P(d,φ)⇒P(p,q)
 
-P(rcosθ,rsinθ)
+P(dcosφ,dsinφ)
 
-φ回転すると考える
+θ回転すると考える
 
-P'(r,θ+φ)
-P'(rcos(θ+φ),rsin(θ+φ))
+P'(d,θ+φ)
+P'(dcos(θ+φ),dsin(θ+φ))
 
 加法定理
 cos(θ+φ)=cosθcosφ-sinθsinφ
 sin(θ+φ)=sinθcosφ+sinφcosθ
 
-P'(rcosθcosφ-rsinθsinφ,rsinθcosφ+rcosθsinφ)
-P(rcosθ,rsinθ)でした。
-p=rcosθ,q=rsinθ
-を考慮すると
-式P'(rcosθcosφ-rsinθsinφ,rsinθcosφ+rcosθsinφ)
-は
-P'(pcosφ-qsinφ,psinφ+qcosφ)
+P'(dcosφcosθ-dsinφsinθ,dsinφcosθ+dcosφsinθ)
+P(dcosφ,dsinφ)=P(p,q)でした。
 
-(p,q)|cosφ  sinφ  |=(p',q')
-	 |-sinφ cosφ  |
+p=dcosφ,q=dsinφ
+を考慮すると
+式P'(dcosφcosθ-dsinφsinθ,dsinφcosθ+dcosφsinθ)
+
+は
+P'(pcosθ-qsinθ,psinθ+qcosθ)
+
+(p,q)|cosθ  sinθ  |=(p',q')
+	 |-sinθ cosθ  |
+
+
+|cosθ -sinθ||p|=|pcosθ-qsinθ|
+|sinθ  cosθ||q| |psinθ+qcosθ|
 
 
 任意座標C中心回転の場合は
@@ -137,3 +143,54 @@ P*=M
 
 
 合成は乗算を行うことで計算できる
+
+
+
+|1 0||x|=|x|
+|0 1||y| |y|
+x方向に1、y方向に2移動したい
+|1 b||x|=|x+by|
+|c 1||y| |cx+y|
+
+by=1
+cx=2
+無理！なので、1次元増やす(この次元を
+同次座標系といいます)
+
+|1 0 a||x|=|x+a|
+|0 1 b||y| |y+b|
+|0 0 1||1| |1|
+
+
+|1 0 a||x|=|x+2a|
+|0 1 b||y| |y+2b|
+|0 0 1||2| | 2  |
+
+2Dの同次座標系の3番目の要素は常に１
+
+|1 0 a||x|=|x+0a|
+|0 1 b||y| |y+0b|
+|0 0 1||0| | 0  |
+
+(x,y,1)|1 0 1|=(x,y,x+2y+1)
+       |0 1 2|
+       |0 0 1|
+
+
+(x,y,1)|1 0 0|=(x+1,y+2,1)
+       |0 1 0|
+       |1 2 1|
+
+行優先、列優先とかいうんですが、
+これが統一されてない
+数学の世界や、OpenGL系だと、
+右にベクトルが来ます。
+
+
+
+AxBxCxDxExF
+
+
+
+
+
