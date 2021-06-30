@@ -30,12 +30,45 @@ DrawRotaGraphもDrawExpandGraphも必要ない。
 この座標P(p,q)の原点からの距離がrであり、
 Ｘ軸(基準軸)とのなす角度がθであるとする。
 
+<<<<<<< HEAD
+=======
+直交座標(p,q)→極座標(d,φ)
+
+>>>>>>> c55bc08a68a90056fb7d881313da6010a42e6305
 d=√(p*p+q*q)
 φ=atan2(q,p)
 
 という感じで、距離と角度によってもその場所は表現できる
 つまり同じ座標PをP(d,φ)とも書ける。これを「極座標」と
 いう。
+
+極座標P(d,φ)→直交座標P(p,q)
+p=d*cosφ
+q=d*sinφ
+
+(d,φ)をθ回転する
+→P'(d,φ+θ):回転後の極座標
+
+ここで
+極座標P(d,φ)→直交座標P(p,q)
+p=d*cosφ
+q=d*sinφ
+を思い出そう
+p'=d*cos(φ+θ)
+q'=d*sin(φ+θ)
+
+「加法定理」
+cos(φ+θ)=cosφcosθ-sinφsinθ
+sin(φ+θ)=sinφcosθ+cosφsinθ
+
+p'=d*{cosφcosθ-sinφsinθ}
+q'=d*{sinφcosθ+cosφsinθ}
+
+p'=d*cosφcosθ-d*sinφsinθ
+q'=d*sinφcosθ+d*cosφsinθ
+
+p'=p*cosθ-q*sinθ
+q'=p*sinθ+q*cosθ
 
 Gimpだと
 x→θ

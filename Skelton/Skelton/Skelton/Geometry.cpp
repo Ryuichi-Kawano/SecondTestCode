@@ -28,7 +28,7 @@ Vector2::operator==(const Vector2& vec)const {
 
 float 
 Vector2::Magnitude()const {
-	return std::hypotf(x, y);
+	return std::sqrt(SQMagnitude());
 }
 
 float

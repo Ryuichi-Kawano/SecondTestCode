@@ -281,6 +281,60 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//敵の本体(当たり判定)
 			DrawCircle(enemypos.x, enemypos.y, 5, 0xffffff, false, 3);
 		}
+
+		//ホーミングレーザー
+		{
+			Vector2 lazerVec = Vector2(1.0f, 0.5f).Normalized();
+			Vector2 dirVec = (enemypos - player.pos).Normalized();
+			Position2 lazerP = player.pos;
+			while (true) {
+				auto nextLazerP = lazerP + lazerVec * 32.0f;
+				DrawLineAA(lazerP.x, lazerP.y, nextLazerP.x, nextLazerP.y, 0xff4444, 8.0f);
+				auto tmpVec = (dirVec + lazerVec).Normalized();
+				while (Dot(tmpVec, lazerVec) <= 0.9f) {//角度が離れすぎているなら採用しない
+
+					tmpVec = (lazerVec + tmpVec).Normalized();
+				}
+				lazerVec = tmpVec;
+				lazerP = nextLazerP;
+				if (lazerP.y < enemypos.y) {
+					break;
+				}
+				dirVec = (enemypos - lazerP).Normalized();
+				auto dot = Dot(lazerVec, dirVec);
+				if (abs(dot) >= 0.995) {
+					DrawLineAA(lazerP.x, lazerP.y, enemypos.x, enemypos.y, 0xff4444, 8.0f);
+					break;
+				}
+			}
+		}
+		{
+			Vector2 lazerVec = Vector2( -1.0f,0.5f ).Normalized();
+			Vector2 dirVec = (enemypos - player.pos).Normalized();
+			Position2 lazerP = player.pos;
+			while (true) {
+				auto nextLazerP = lazerP + lazerVec * 32.0f;
+				DrawLineAA(lazerP.x, lazerP.y, nextLazerP.x, nextLazerP.y, 0xff4444, 8.0f);
+				auto tmpVec = (dirVec + lazerVec).Normalized();
+				while (Dot(tmpVec, lazerVec) <= 0.9f) {//角度が離れすぎているなら採用しない
+
+					tmpVec = (lazerVec + tmpVec).Normalized();
+				}
+				lazerVec = tmpVec;
+				lazerP = nextLazerP;
+				if (lazerP.y < enemypos.y) {
+					break;
+				}
+				dirVec = (enemypos - lazerP).Normalized();
+				auto dot = Dot(lazerVec, dirVec);
+				if (abs(dot) >= 0.995) {
+					DrawLineAA(lazerP.x, lazerP.y, enemypos.x, enemypos.y, 0xff4444, 8.0f);
+					break;
+				}
+			}
+		}
+
+
 		frame=(frame+1)%(frame_for_bullet_type*bullet_type_num);
 		ScreenFlip();
 	}

@@ -1,6 +1,7 @@
 #include"Geometry.h"
 #include<DxLib.h>
 #include<cmath>
+#include<algorithm>
 
 
 void
@@ -101,4 +102,19 @@ void
 Vector2::operator-=(const Vector2& v) {
 	x -= v.x;
 	y -= v.y;
+}
+
+bool
+Vector2::operator==(const Vector2& val)const {
+	return x == val.x && y == val.y;
+}
+void
+Vector2::Rotate90() {//90‹‰ñ“]‚³‚¹‚é
+	std::swap(x, y);
+	x = -x;
+}
+
+Vector2
+Vector2::Rotated90() const {//90‹‰ñ“]‚³‚¹‚½ƒxƒNƒgƒ‹‚ğ•Ô‚·
+	return { -y,x };
 }

@@ -27,9 +27,18 @@ struct Vector2 {
 	void operator*=(float scale);
 	Vector2 operator*(float scale);
 	void operator/=(float scale);
+	bool operator==(const Vector2& val)const;
 	Vector2 operator/(float scale);
 	Vector2 operator-() {
 		return Vector2(-x, -y);
+	}
+	/// <summary>
+	/// 90ÅãâÒì]Ç∑ÇÈ
+	/// </summary>
+	void Rotate90();
+	Vector2 Rotated90()const;
+	static const Vector2 Zero() {
+		return { 0.0f,0.0f };
 	}
 };
 
